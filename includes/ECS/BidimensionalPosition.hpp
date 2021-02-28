@@ -1,18 +1,24 @@
-#ifndef components_hpp
-#define components_hpp
+#ifndef bidimensional_position_hpp
+#define bidimensional_position_hpp
 
-#include <ECS.hpp>
+#include <ECS/ECS.hpp>
 
 class BidimensionalPoint: public Component {
 private:
     int xPosition;
     int yPosition;
 public:
-    BidimensionalPoint(void) : Component() {}
+    BidimensionalPoint(void) : Component() {
+        init();
+    }
+
+    BidimensionalPoint(int x = 0, int y = 0) : Component() {
+        xPosition = x;
+        yPosition = y;
+    }
 
     virtual ~BidimensionalPoint(void) override {
-        xPosition = 0;
-        yPosition = 0;
+        init();
     }
 
     void init(void) override {
@@ -54,4 +60,4 @@ public:
     }
 };
 
-#endif /* components_hpp */
+#endif /* bidimensional_position_hpp */

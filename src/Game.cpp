@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include <ECS.hpp>
-#include <Components.hpp>
+#include <ECS/ECS.hpp>
+#include <ECS/Components.hpp>
 
 #include <Game.hpp>
 #include <GameConfig.hpp>
@@ -9,10 +9,8 @@
 #include <Map.hpp>
 
 EntityManager manager;
-auto& playerEntity(manager.addEntity());
+auto& ghost(manager.addEntity());
 
-Object* ghost;
-Object* hellSoldier;
 Map* map;
 
 SDL_Renderer* Game::renderer = nullptr;
@@ -67,25 +65,28 @@ void Game::initialize(GameConfig config) {
     isRunning = ((SDL_Init(SDL_INIT_EVERYTHING) == 0) && window && renderer);
 
     map = new Map();
-    ghost = new Object("assets/ghost.png", 0, 600 - 64);
-    hellSoldier = new Object("assets/hell_soldier.png", 128, 600 - 64);
 
-    playerEntity.addComponent<BidimensionalPoint>();
-    playerEntity.getComponent<BidimensionalPoint>().set(0,0);
+    // ECS Implementation ...
+    ghost.addComponent<BidimensionalPoint>(20,20);
+    ghost.addComponent<Sprite>("assets/ghost.png");
 }
 
 void Game::update(void) {
-    ghost->update();
-    hellSoldier->update();
-    manager.update(); 
+    // manager.refresh();
+    manager.update();
+
+    if (ghost.getComponent<BidimensionalPoint>().x() > 40 && ghost.getComponent<BidimensionalPoint>().x() <= 200) {
+        ghost.getComponent<Sprite>().setTexture("assets/hell_soldier.png");
+    } else if (ghost.getComponent<BidimensionalPoint>().x() > 200) {
+        ghost.getComponent<Sprite>().setTexture("assets/ghost.png");
+    }
 }
 
 void Game::render(void) {
     SDL_RenderClear(Game::renderer);
 
     map->drawMap();
-    ghost->render();
-    hellSoldier->render();
+    manager.draw();
 
     SDL_RenderPresent(Game::renderer);
 }

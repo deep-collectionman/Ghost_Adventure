@@ -74,7 +74,7 @@ public:
 
     template <typename Type>
     inline bool hasComponent(void) const {
-        return bitSet[componentTypeID<Type>];
+        return bitSet[componentTypeID<Type>()];
     }
 
     template <typename Type, typename... TArgs>
