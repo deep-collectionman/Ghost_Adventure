@@ -11,7 +11,7 @@ SOURCE = $(wildcard ./src/*.cpp) $(wildcard ./*.cpp)
 LINKER_FLAGS = -lSDL2 -lSDL2_image
 
 build:
-	$(CC) -I$(HEADERS_FOLDER) $(SOURCE) $(LINKER_FLAGS) -o game.exe
+	$(CC) -std=c++14 -I$(HEADERS_FOLDER) $(SOURCE) $(LINKER_FLAGS) -o game.exe
 
 run:
 	./game.exe

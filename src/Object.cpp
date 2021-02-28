@@ -1,24 +1,20 @@
 #include <Object.hpp>
 
 Object::Object(
-    const char* textureSheet, 
-    SDL_Renderer* renderer, 
+    const char* textureSheet,
     int xPosition,
     int yPosition
-) : renderer(renderer), xPosition(xPosition), yPosition(yPosition) {
-    texture = TextureManager::makeTexture(textureSheet, renderer);
+) : xPosition(xPosition), yPosition(yPosition) {
+    texture = TextureManager::makeTexture(textureSheet);
 }
 
 Object::~Object(void) {
     SDL_DestroyTexture(texture);
-    SDL_DestroyRenderer(renderer);
 }
 
 void Object::update(void) {
-    source.h = 64;
-    source.w = 64;
-    source.x = 0;
-    source.y = 0;
+    source.h = source.w = 64;
+    source.x = source.y = 0;
 
     destination.h = source.h;
     destination.w = source.w;
@@ -27,5 +23,5 @@ void Object::update(void) {
 }
 
 void Object::render(void) {
-    SDL_RenderCopy(renderer, texture, &source, &destination);
+    SDL_RenderCopy(Game::renderer, texture, &source, &destination);
 }

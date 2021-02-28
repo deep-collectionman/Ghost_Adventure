@@ -1,11 +1,19 @@
 #include <iostream>
 
+#include <ECS.hpp>
+#include <Components.hpp>
+
 #include <Game.hpp>
 #include <GameConfig.hpp>
 #include <Object.hpp>
+#include <Map.hpp>
+
+EntityManager manager;
+auto& playerEntity(manager.addEntity());
 
 Object* ghost;
 Object* hellSoldier;
+Map* map;
 
 SDL_Renderer* Game::renderer = nullptr;
 
@@ -58,27 +66,33 @@ void Game::initialize(GameConfig config) {
 
     isRunning = ((SDL_Init(SDL_INIT_EVERYTHING) == 0) && window && renderer);
 
-    ghost = new Object("assets/ghost.png", renderer, 0, 600 - 64);
-    hellSoldier = new Object("assets/hell_soldier.png", renderer, 128, 600 - 64);
+    map = new Map();
+    ghost = new Object("assets/ghost.png", 0, 600 - 64);
+    hellSoldier = new Object("assets/hell_soldier.png", 128, 600 - 64);
+
+    playerEntity.addComponent<BidimensionalPoint>();
+    playerEntity.getComponent<BidimensionalPoint>().set(0,0);
 }
 
 void Game::update(void) {
     ghost->update();
     hellSoldier->update();
+    manager.update(); 
 }
 
 void Game::render(void) {
-    SDL_RenderClear(renderer);
+    SDL_RenderClear(Game::renderer);
 
+    map->drawMap();
     ghost->render();
     hellSoldier->render();
 
-    SDL_RenderPresent(renderer);
+    SDL_RenderPresent(Game::renderer);
 }
 
 void Game::clean(void) {
     SDL_DestroyWindow(window);
-    SDL_DestroyRenderer(renderer);
+    SDL_DestroyRenderer(Game::renderer);
     SDL_Quit();
 
     // TODO: Logger.info("Game cleaned");

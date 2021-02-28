@@ -3,6 +3,7 @@
 
 class Updatable {
 public:
+    virtual ~Updatable(void) {};
     virtual void update(void) = 0; 
 };
 
